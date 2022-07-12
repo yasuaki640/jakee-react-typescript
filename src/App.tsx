@@ -1,11 +1,17 @@
 import React from 'react';
 import './App.css';
+import {  ChakraProvider } from '@chakra-ui/react';
+import theme from './theme/theme';
+import { Router } from './router/Router';
+import { BrowserRouter } from 'react-router-dom';
 
 function App() {
   return (
-    <div className="App">
-      <h1>destroyed</h1>
-    </div>
+    <ChakraProvider theme={theme}>
+      <BrowserRouter>
+        <Router />
+      </BrowserRouter>
+    </ChakraProvider>
   );
 }
 
