@@ -1,6 +1,6 @@
-import { Home } from '../pages/Home';
-import { UserManagement } from '../pages/UserManagement';
-import { Setting } from '../pages/Setting';
+import { Home } from '../components/pages/Home';
+import { UserManagement } from '../components/pages/UserManagement';
+import { Setting } from '../components/pages/Setting';
 
 type Route = {
   path: string;
