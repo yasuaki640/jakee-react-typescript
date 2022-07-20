@@ -3,6 +3,7 @@ import axios, { AxiosError } from 'axios';
 import { User } from '../types/user';
 import { useNavigate } from 'react-router-dom';
 import { useMessage } from './useMessage';
+import { useLoginUser } from './useLoginUser';
 
 const messages: { [key: number]: string } = {
   200: 'Successfully login.',
@@ -13,6 +14,7 @@ const messages: { [key: number]: string } = {
 export const useAuth = () => {
   const navigate = useNavigate();
   const { showMessage } = useMessage();
+  const { setLoginUser } = useLoginUser();
 
   const [loading, setLoading] = useState(false);
 
@@ -24,6 +26,7 @@ export const useAuth = () => {
         .get<User>(`https://jsonplaceholder.typicode.com/users/${id}`)
         .then((res) => {
           if (res.data) {
+            setLoginUser(res.data);
             showMessage({ title: messages[res.status], status: 'success' });
             navigate('/home');
           }
@@ -34,7 +37,7 @@ export const useAuth = () => {
         })
         .finally(() => setLoading(false));
     },
-    [navigate, showMessage],
+    [navigate, showMessage, setLoginUser],
   );
   return { login, loading };
 };
