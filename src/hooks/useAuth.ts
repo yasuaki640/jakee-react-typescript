@@ -1,8 +1,14 @@
 import { useCallback, useState } from 'react';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { User } from '../types/user';
 import { useNavigate } from 'react-router-dom';
 import { useMessage } from './useMessage';
+
+const messages: { [key: number]: string } = {
+  200: 'Successfully login.',
+  404: 'User not found.',
+  500: 'Unexpected error occurred.',
+};
 
 export const useAuth = () => {
   const navigate = useNavigate();
@@ -18,13 +24,14 @@ export const useAuth = () => {
         .get<User>(`https://jsonplaceholder.typicode.com/users/${id}`)
         .then((res) => {
           if (res.data) {
-            showMessage({ title: 'Successfully login.', status: 'success' });
+            showMessage({ title: messages[res.status], status: 'success' });
             navigate('/home');
-          } else {
-            showMessage({ title: 'User not found.', status: 'error' });
           }
         })
-        .catch(() => showMessage({ title: 'Unexpected error occurred.', status: 'error' }))
+        .catch((e: AxiosError) => {
+          const title = messages[e.response?.status || 500];
+          showMessage({ title, status: 'error' });
+        })
         .finally(() => setLoading(false));
     },
     [navigate, showMessage],
